@@ -1,0 +1,12 @@
+.DS_Store
+*.dSYM
+*.o
+htest1.c
+htest2.c
+htest3.c
+htest4.c
+htest1
+htest2
+htest3
+htest4
+names1.txt
