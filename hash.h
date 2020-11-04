@@ -34,5 +34,4 @@ int hashAccuracy(struct HashTable *table);
 
 void rehash(struct HashTable *table);
 
-
 #endif

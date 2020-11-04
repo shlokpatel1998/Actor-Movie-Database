@@ -3,6 +3,7 @@
 #include <string.h>
 #include "hash.h"
 
+//new performance function to initialize values
 struct Performance *newPerformance() {
     struct Performance *pIndicator = malloc(sizeof(struct Performance));
     if(pIndicator == NULL) {
@@ -16,6 +17,7 @@ struct Performance *newPerformance() {
     return pIndicator;
 }
 
+//creates a HashTable, mallocs capacity number of void pointers as array, and initializes the table
 struct HashTable *createTable(struct Performance *performance, unsigned int capacity, int(*hash)(void*, int), int(*compar)(const void*, const void*)) {
     struct HashTable *temp = malloc(sizeof(struct HashTable));
     if(temp == NULL) {
@@ -39,6 +41,8 @@ struct HashTable *createTable(struct Performance *performance, unsigned int capa
     return temp;
 }
 
+//function adds an elements into the hashtable
+//uses linear probing to find the location for storage (checks if successive index is null)
 void addElement(struct Performance *performance, struct HashTable *table, void *src) {
     if(table->nel == table->capacity) {
         fprintf(stderr, "max capacity");
@@ -59,6 +63,9 @@ void addElement(struct Performance *performance, struct HashTable *table, void *
     }
 }
 
+//gets the ID of the passed in void pointer
+//compares the src pointer to each not NULL pointer from the hash value forward
+//will loop around once it has reached the capacity
 int getIdx(struct Performance *performance, struct HashTable *table, void *src) {
     int index = table->hash(src, table->capacity); 
     int originalIndex = index;
@@ -70,9 +77,9 @@ int getIdx(struct Performance *performance, struct HashTable *table, void *src) 
                 return i;
             }
             else if(i == (table->capacity - 1)) {
-                i = -1;
+                i = -1;   //reinitialize the value of i in for loop
             }
-            else if(i == (originalIndex-1)) { //reaches the last index to search meaning not found
+            else if(i == (originalIndex-1)) { //reaches the last index to search -> meaning not found
                 return -1;
             }
         }
@@ -83,12 +90,14 @@ int getIdx(struct Performance *performance, struct HashTable *table, void *src) 
     return -1; //redundant measure to return -1 if match not found
 }
 
+//frees the data array of pointers and the table itself
 void freeTable(struct Performance *performance, struct HashTable *table) {
     free(table->data);
     free(table);
     performance->frees += 1;
 }
 
+//uses getIdx to get the element's integer representation
 void *getElement(struct Performance *performance, struct HashTable *table, void *src) {
     int index = getIdx(performance, table, src);
     if(index == -1) {
@@ -99,6 +108,7 @@ void *getElement(struct Performance *performance, struct HashTable *table, void 
     }
 }
 
+//function removes element by setting the pointer to null
 void removeElement(struct Performance *performance, struct HashTable *table, void *target) { 
     int removeIndex = getIdx(performance, table, target);
     if(removeIndex != -1) {
@@ -107,6 +117,7 @@ void removeElement(struct Performance *performance, struct HashTable *table, voi
     }
 }
 
+//function calculates the difference between the index and its hash value and calculates the total 
 int hashAccuracy(struct HashTable *table) {
     int totalCollisions = 0;
     for(int index = 0; index < table->capacity; index++) {
@@ -125,13 +136,17 @@ int hashAccuracy(struct HashTable *table) {
     return totalCollisions;
 }
 
+//function rearranges the pointer indexes to reduce the hashaccuracy
+//step 1a: if there are null pointers in between the index and the hashvalue, it will swap it
+//step 1b: if there is a null pointer behind the hashvalue, and the difference between index and hash is still greater than 1, it will swap behind
+//step 2: if the index is behind the hash value it will find a null pointer closer to the hash value and swap
 void rehash(struct HashTable *table) {
     if(table->nel < table->capacity) {  
         for(int index = 0; index < table->capacity; index++) {
             if((table->data)[index] != NULL) {
                 int hashResult = table->hash((table->data)[index], table->capacity);
 
-                if((index - hashResult) > 1) { // checks if the gap is greater than 1 --> for elements ahead of hashResult
+                if((index - hashResult) >= 1) { 
                     for(int j = hashResult; j < index; j++) {
                         if((table->data)[j] == NULL) {
                             (table->data)[j] = (table->data)[index];
@@ -147,29 +162,15 @@ void rehash(struct HashTable *table) {
                     }
                 }
 
-                if((index - hashResult) < -1) {
-                    for(int k = hashResult; k < table->capacity; k++) {
+                if((index - hashResult) <= -1) {
+                    for(int k = hashResult; k > index; k--) {
                         if((table->data)[k] == NULL) {                        
                             (table->data)[k] = (table->data)[index];
                             (table->data)[index] = NULL;
-                            int indexUpdate = k;
-                            if(hashResult != 0 && (table->data)[hashResult-1] == NULL && (indexUpdate - hashResult < -1)) {
-                                (table->data)[hashResult-1] = (table->data)[indexUpdate];
-                                (table->data)[indexUpdate] = NULL;
-                            }
                             break;
-                        }
-
-                        if (k == (table->capacity - 1)) {
-                            k = -1;
-                        }
-                        if(k == (hashResult - 1)) {
-                            break;
-                        }
-                        
+                        }      
                     }
                 }
-
             }
         }
     }
