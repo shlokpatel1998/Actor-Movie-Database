@@ -30,7 +30,9 @@ void *getElement(struct Performance *performance, struct HashTable *table, void 
 
 void removeElement(struct Performance *performance, struct HashTable *table, void *target);
 
+int hashAccuracy(struct HashTable *table);
 
+void rehash(struct HashTable *table);
 
 
 #endif

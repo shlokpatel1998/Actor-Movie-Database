@@ -76,6 +76,9 @@ int getIdx(struct Performance *performance, struct HashTable *table, void *src) 
                 return -1;
             }
         }
+        else {
+            return -1;
+        }
     }
     return -1; //redundant measure to return -1 if match not found
 }
@@ -101,5 +104,73 @@ void removeElement(struct Performance *performance, struct HashTable *table, voi
     if(removeIndex != -1) {
         (table->data)[removeIndex] = NULL;
         performance->writes += 1;
+    }
+}
+
+int hashAccuracy(struct HashTable *table) {
+    int totalCollisions = 0;
+    for(int index = 0; index < table->capacity; index++) {
+        if((table->data)[index] != NULL) {
+            int hashResult = table->hash((table->data)[index], table->capacity);
+            if(hashResult == index) {
+            }
+            else if(hashResult < index) {
+                totalCollisions += index - hashResult;
+            }
+            else if(hashResult > index) {
+                totalCollisions += (index - hashResult) + table->capacity;
+            }
+        }
+    }
+    return totalCollisions;
+}
+
+void rehash(struct HashTable *table) {
+    if(table->nel < table->capacity) {  
+        for(int index = 0; index < table->capacity; index++) {
+            if((table->data)[index] != NULL) {
+                int hashResult = table->hash((table->data)[index], table->capacity);
+
+                if((index - hashResult) > 1) { // checks if the gap is greater than 1 --> for elements ahead of hashResult
+                    for(int j = hashResult; j < index; j++) {
+                        if((table->data)[j] == NULL) {
+                            (table->data)[j] = (table->data)[index];
+                            (table->data)[index] = NULL;
+                            int indexUpdate = j; //new index location
+                            
+                            if(hashResult != 0 && (table->data)[hashResult-1] == NULL && (indexUpdate - hashResult > 1)) { //gap still greater than one, swap behind if possible
+                                (table->data)[hashResult-1] = (table->data)[indexUpdate];
+                                (table->data)[indexUpdate] = NULL;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if((index - hashResult) < -1) {
+                    for(int k = hashResult; k < table->capacity; k++) {
+                        if((table->data)[k] == NULL) {                        
+                            (table->data)[k] = (table->data)[index];
+                            (table->data)[index] = NULL;
+                            int indexUpdate = k;
+                            if(hashResult != 0 && (table->data)[hashResult-1] == NULL && (indexUpdate - hashResult < -1)) {
+                                (table->data)[hashResult-1] = (table->data)[indexUpdate];
+                                (table->data)[indexUpdate] = NULL;
+                            }
+                            break;
+                        }
+
+                        if (k == (table->capacity - 1)) {
+                            k = -1;
+                        }
+                        if(k == (hashResult - 1)) {
+                            break;
+                        }
+                        
+                    }
+                }
+
+            }
+        }
     }
 }
