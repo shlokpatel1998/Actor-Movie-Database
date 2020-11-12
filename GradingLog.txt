@@ -32,7 +32,7 @@ Compiling and linking gradeA5_removeElement
 Found gradeA5_removeElement
 Compilation succeeded
 removeElement failed
-  '3-15:1:0-incorrect\n'!='3-11:1:0-0\n'
+  '3-15:1:0-incorrect\n'!='3-14:1:0-0\n'
 Compiling and linking gradeA5_freeTable
 Found gradeA5_freeTable
 Compilation succeeded
