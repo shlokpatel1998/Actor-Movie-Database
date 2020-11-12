@@ -1,0 +1,59 @@
+Found hash.c
+Compiling
+Found hash.o
+Compilation succeeded
+Compiling and linking gradeA5_newPerformance
+Found gradeA5_newPerformance
+Compilation succeeded
+newPerformance passed
+Compiling and linking gradeA5_createTable
+Found gradeA5_createTable
+Compilation succeeded
+createTable passed
+Compiling and linking gradeA5_addElement
+Found gradeA5_addElement
+Compilation succeeded
+addElement passed
+addElement passed
+addElement failed
+  'invalid:1:0-140\n'!='valid:1:0-140\n'
+Compiling and linking gradeA5_getIdx
+Found gradeA5_getIdx
+Compilation succeeded
+getIdx passed
+getIdx passed
+getIdx passed
+getIdx passed
+Compiling and linking gradeA5_getElement
+Found gradeA5_getElement
+Compilation succeeded
+getElement passed
+Compiling and linking gradeA5_removeElement
+Found gradeA5_removeElement
+Compilation succeeded
+removeElement failed
+  '3-15:1:0-incorrect\n'!='3-11:1:0-0\n'
+Compiling and linking gradeA5_freeTable
+Found gradeA5_freeTable
+Compilation succeeded
+freeTable failed
+  'invalid:2:2\n'!='valid:2:2\n'
+Compiling and linking gradeA5_hashAccuracy
+Found gradeA5_hashAccuracy
+Compilation succeeded
+hashAccuracy failed
+  'invalid:1:0-116-100\n'!='valid:1:0-116-96\n'
+hashAccuracy failed
+  'invalid:1:0-120-100\n'!='valid:1:0-120-99\n'
+Compiling and linking gradeA5_rehash
+Found gradeA5_rehash
+Compilation succeeded
+rehash failed
+  'invalid:1:0-unimproved\n'!='valid:1:0-improved\n'
+rehash failed
+  'invalid:1:0-improved\n'!='valid:1:0-improved\n'
+Found makefile
+Correct options
+Comments
+Indentation levels are: ['', '    ', '        ', '            ', '                ', '                    ', '                        ', '                            ', '                                ']
+Assignment submitted by Shlok <shlok@uoguelph.ca> at: Wed Nov 4 14:53:13 2020

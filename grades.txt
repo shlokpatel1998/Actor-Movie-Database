@@ -1,0 +1,22 @@
+ 1                                     newPerformance: 1
+ 2                                        createTable: 1
+ 3                                         addElement: 1
+ 4                                         addElement: 1
+ 5                                         addElement: 0
+ 6                                             getIdx: 1
+ 7                                             getIdx: 1
+ 8                                             getIdx: 1
+ 9                                             getIdx: 1
+10                                         getElement: 1
+11                                      removeElement: 0
+12                                          freeTable: 0
+13                                       hashAccuracy: 0
+14                                       hashAccuracy: 0
+15                                             rehash: 0
+16                                             rehash: 0
+17                                    makefile exists: 1
+18                           correct makefile options: 1
+19                                  code has comments: 1
+20                                   code is indented: 1
+========================================================
+Total:                                             13/20
